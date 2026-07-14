@@ -25,19 +25,31 @@ You do not need to set any environment variable to get a working first deploy. T
 
 ## Environment variables
 
-There is exactly one, and it is optional until you have a real domain.
+**There are none to set. Deploy as is.**
 
-| Variable | Set it to | When |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | `https://your-real-domain.com` | Once you attach a custom domain |
+If you are happy running on the default `*.vercel.app` address, skip this section entirely. Everything works, including the preview cards on shared links.
 
-**What it does.** Open Graph image URLs have to be absolute, so the app needs to know where it lives. `src/app/layout.tsx` works this out in three steps: it uses `NEXT_PUBLIC_SITE_URL` if you set it, falls back to the Vercel production URL that Vercel injects automatically, and falls back again to localhost for local development.
+Here is why. Open Graph image URLs have to be absolute, so the app needs to know where it lives. `src/app/layout.tsx` works that out in three steps:
 
-**Why you care.** If you attach a custom domain and do not set this, the preview cards on shared links will still point at the old `*.vercel.app` address. The links will work, but the preview images may not load, and a link an advisor sends a client will look broken.
+1. Use `NEXT_PUBLIC_SITE_URL` if somebody has set it.
+2. Otherwise use `VERCEL_PROJECT_PRODUCTION_URL`, which **Vercel injects on its own**. You do not create it and you do not configure it.
+3. Otherwise fall back to localhost, which is what happens when you run `npm run dev`.
 
-**How to set it.** In the Vercel dashboard: Settings, then Environment Variables. Add `NEXT_PUBLIC_SITE_URL`, scope it to Production, and redeploy. The value must include the scheme, so `https://example.com` rather than `example.com`.
+On a default Vercel deploy, step 2 always fires. The cards get built against your production `*.vercel.app` address and they render correctly.
 
-Note the `NEXT_PUBLIC_` prefix is required. It is what tells Next to make the value available at build time, which is when the OG cards are generated.
+### The one day this matters
+
+**When you attach a custom domain.** At that point the site answers on the new domain, but the preview cards were generated against the old `*.vercel.app` address. Links still work and pages still load. The preview image on a shared link is what breaks, so a link an advisor texts a client renders as a bare URL instead of a titled card.
+
+The fix takes a minute and needs no code change:
+
+| Variable | Set it to |
+| --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | `https://your-real-domain.com` |
+
+In the Vercel dashboard: Settings, then Environment Variables. Add it, scope it to Production, redeploy. Include the scheme, so `https://example.com` and not `example.com`.
+
+The `NEXT_PUBLIC_` prefix is part of the name, not a suggestion. It is what makes the value available at build time, which is when the cards are generated.
 
 ## The one thing that must happen before the public sees this
 
