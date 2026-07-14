@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFSA & Universal Life Strategic Wealth Simulator</title>
+    <style>
+        :root {
+            --bg-main: #0B0F19;
+            --card-bg: #161D30;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --primary: #10B981;
+            --primary-light: #34D399;
+            --accent: #3B82F6;
+            --border: #24324F;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #FFFFFF;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+
+        .control-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        label span {
+            color: var(--primary-light);
+            font-family: monospace;
+            font-size: 16px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            background: var(--primary-light);
+        }
+
+        .results-panel {
+            background-color: rgba(11, 15, 25, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .stat-box {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 0;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-top: 5px;
+        }
+
+        .stat-value.highlight {
+            color: var(--primary-light);
+        }
+
+        .bar-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bar-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bar-bg {
+            background-color: var(--border);
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .ul-fill { background-color: var(--accent); }
+        .tfsa-fill { background-color: var(--primary); }
+
+        .disclaimer {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 25px;
+            text-align: center;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Client Portfolio Projection: TFSA + Universal Life</h2>
+    
+    <div class="grid">
+        <!-- Inputs -->
+        <div class="control-panel">
+            <div class="input-group">
+                <label>Current Age: <span id="ageVal">25</span></label>
+                <input type="range" id="ageInput" min="18" max="50" value="25">
+            </div>
+
+            <div class="input-group">
+                <label>Funding Duration (Years): <span id="yearsVal">20</span></label>
+                <input type="range" id="yearsInput" min="5" max="40" value="20">
+            </div>
+
+            <div class="input-group">
+                <label>Universal Life Premium: <span id="ulVal">$200</span>/mo</label>
+                <input type="range" id="ulInput" min="50" max="1000" step="50" value="200">
+            </div>
+
+            <div class="input-group">
+                <label>TFSA Contribution: <span id="tfsaVal">$100</span>/mo</label>
+                <input type="range" id="tfsaInput" min="50" max="1000" step="50" value="100">
+            </div>
+
+            <div class="input-group">
+                <label>Assumed Growth Rate: <span id="rateVal">7%</span></label>
+                <input type="range" id="rateInput" min="3" max="10" value="7">
+            </div>
+        </div>
+
+        <!-- Outputs -->
+        <div class="results-panel">
+            <div>
+                <div class="stat-box">
+                    <div class="stat-label">Total Capital Invested</div>
+                    <div class="stat-value" id="totalInvested">$0</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">Estimated Value at Age <span id="targetAge">45</span></div>
+                    <div class="stat-value highlight" id="totalEndHorizon">$0</div>
+                </div>
+
+                <div class="stat-box">
+                    <div class="stat-label">Compounded Value at Age 65 (No New Deposits)</div>
+                    <div class="stat-value" id="valueAt65">$0</div>
+                </div>
+            </div>
+
+            <div class="bar-container">
+                <div class="bar-label"><span>Universal Life Component</span><span id="ulShare">$0</span></div>
+                <div class="bar-bg"><div id="ulBar" class="bar-fill ul-fill" style="width: 0%"></div></div>
+                
+                <div class="bar-label"><span>TFSA Component</span><span id="tfsaShare">$0</span></div>
+                <div class="bar-bg"><div id="tfsaBar" class="bar-fill tfsa-fill" style="width: 0%"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="disclaimer">
+        *Disclaimer: Values are strictly for illustrative purposes based on compounding interest formulas applied monthly. Universal Life projections depend directly on specific product medical classes and Cost of Insurance (COI) variations.
+    </div>
+</div>
+
+<script>
+    const ageInput = document.getElementById('ageInput');
+    const yearsInput = document.getElementById('yearsInput');
+    const ulInput = document.getElementById('ulInput');
+    const tfsaInput = document.getElementById('tfsaInput');
+    const rateInput = document.getElementById('rateInput');
+
+    function formatCurrency(num) {
+        return '$' + Math.round(num).toLocaleString('en-CA');
+    }
+
+    function calculateFutureValue(monthlyDeposit, monthlyRate, totalMonths) {
+        if (monthlyRate === 0) return monthlyDeposit * totalMonths;
+        return monthlyDeposit * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+    }
+
+    function updateCalculations() {
+        // Read values
+        const age = parseInt(ageInput.value);
+        const years = parseInt(yearsInput.value);
+        const ulMo = parseInt(ulInput.value);
+        const tfsaMo = parseInt(tfsaInput.value);
+        const annualRate = parseInt(rateInput.value) / 100;
+
+        // Update slider labels
+        document.getElementById('ageVal').innerText = age;
+        document.getElementById('yearsVal').innerText = years;
+        document.getElementById('ulVal').innerText = '$' + ulMo;
+        document.getElementById('tfsaVal').innerText = '$' + tfsaMo;
+        document.getElementById('rateVal').innerText = (annualRate * 100) + '%';
+        document.getElementById('targetAge').innerText = age + years;
+
+        // Calculations
+        const totalMonths = years * 12;
+        const monthlyRate = annualRate / 12;
+
+        const totalPrincipal = (ulMo + tfsaMo) * totalMonths;
+        const ulFV = calculateFutureValue(ulMo, monthlyRate, totalMonths);
+        const tfsaFV = calculateFutureValue(tfsaMo, monthlyRate, totalMonths);
+        const totalFV = ulFV + tfsaFV;
+
+        // Compound to Age 65
+        let fv65 = totalFV;
+        const yearsTo65 = 65 - (age + years);
+        if (yearsTo65 > 0) {
+            fv65 = totalFV * Math.pow(1 + annualRate, yearsTo65);
+        }
+
+        // Display results
+        document.getElementById('totalInvested').innerText = formatCurrency(totalPrincipal);
+        document.getElementById('totalEndHorizon').innerText = formatCurrency(totalFV);
+        document.getElementById('valueAt65').innerText = formatCurrency(fv65);
+        document.getElementById('ulShare').innerText = formatCurrency(ulFV);
+        document.getElementById('tfsaShare').innerText = formatCurrency(tfsaFV);
+
+        // Visual Bars
+        const ulPct = (ulFV / totalFV) * 100;
+        const tfsaPct = (tfsaFV / totalFV) * 100;
+        document.getElementById('ulBar').style.width = ulPct + '%';
+        document.getElementById('tfsaBar').style.width = tfsaPct + '%';
+    }
+
+    // Attach listeners
+    [ageInput, yearsInput, ulInput, tfsaInput, rateInput].forEach(input => {
+        input.addEventListener('input', updateCalculations);
+    });
+
+    // Initial run
+    updateCalculations();
+</script>
+
+</body>
+</html>

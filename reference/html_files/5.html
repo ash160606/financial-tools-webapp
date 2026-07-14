@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Private Wealth & Legacy Planner</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg-dark: #080C14;
+            --bg-card: #0F1626;
+            --bg-input: #172033;
+            --text-light: #F9FAFB;
+            --text-muted: #9CA3AF;
+            --emerald: #10B981;
+            --cobalt: #3B82F6;
+            --purple: #8B5CF6;
+            --gold: #F59E0B;
+            --border: #1E293B;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3, h4, .font-heading, .hero-value, .split-value {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Customized Slider Track Styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid var(--emerald);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .cobalt-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--cobalt);
+        }
+
+        .purple-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--purple);
+        }
+
+        .gold-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--gold);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex items-center justify-center">
+
+<div class="w-full max-w-6xl bg-[#0F1626] border border-[#222F4C] rounded-2xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+    <!-- Premium Top Linear Color Shield Gradient -->
+    <div class="absolute top-0 left-0 w-full h-[6px] bg-gradient-to-r from-[#10B981] via-[#3B82F6] to-[#8B5CF6]"></div>
+
+    <!-- Header Block -->
+    <header class="text-center mb-8 relative">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-[rgba(16,185,129,0.08)] border border-[rgba(16,185,129,0.2)] rounded-full text-[#10B981] text-xs font-semibold uppercase tracking-wider mb-3">
+            <i class="fa-solid fa-people-roof"></i> Generational Wealth Management Strategy
+        </div>
+        <h1 class="text-2xl md:text-4xl font-bold tracking-tight text-white mb-2">Family Wealth & Legacy Shield</h1>
+        <p class="text-xs md:text-sm text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Architect a coordinated generational investment strategy. Coordinate mutual contributions from both spouses, track critical educational milestones for children, or reverse-engineer precise goals into required deposit frameworks.
+        </p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="grid grid-cols-2 gap-2 bg-[#172033] p-1.5 rounded-xl mb-8 border border-[#222F4C]">
+        <button id="tabAccumulation" class="flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-bold text-sm transition-all duration-200 bg-[#0F1626] border border-[#222F4C] text-white" onclick="switchMode('accumulation')">
+            <i class="fa-solid fa-chart-line text-[#10B981]"></i> Wealth Accumulation (Invest & Grow)
+        </button>
+        <button id="tabReverse" class="flex items-center justify-center gap-2 py-3 px-4 rounded-lg font-bold text-sm transition-all duration-200 text-gray-400 hover:text-white" onclick="switchMode('reverse')">
+            <i class="fa-solid fa-bullseye text-[#3B82F6]"></i> Reverse Target (Goal-First Planner)
+        </button>
+    </div>
+
+    <!-- Interactive Grid Area -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- ==================== LEFT COLUMN: FAMILY SETUP & INPUTS ==================== -->
+        <div class="lg:col-span-5 bg-[#172033] border border-[#222F4C] rounded-xl p-6 flex flex-col gap-6">
+            
+            <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-[#222F4C] pb-3">
+                <i class="fa-solid fa-user-gear text-[#10B981]"></i> Household Profiles
+            </h3>
+
+            <!-- Spousal Contributions Setup -->
+            <div class="grid grid-cols-1 gap-5 border-b border-[#222F4C] pb-5">
+                <!-- Husband Monthly Contribution -->
+                <div class="flex flex-col gap-2 cobalt-slider" id="husbandGroup">
+                    <div class="flex justify-between items-center text-sm font-semibold">
+                        <label class="text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-user text-[#3B82F6]"></i> Husband Monthly
+                        </label>
+                        <span class="text-[#3B82F6] bg-[rgba(59,130,246,0.12)] px-2.5 py-0.5 rounded border border-[rgba(59,130,246,0.3)] val-display font-semibold" id="lblHusband">$500</span>
+                    </div>
+                    <input type="range" id="inputHusband" min="0" max="3000" step="50" value="500" oninput="calculateFamilyWealth()">
+                </div>
+
+                <!-- Wife Monthly Contribution -->
+                <div class="flex flex-col gap-2 purple-slider" id="wifeGroup">
+                    <div class="flex justify-between items-center text-sm font-semibold">
+                        <label class="text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-user text-[#8B5CF6]"></i> Wife Monthly
+                        </label>
+                        <span class="text-[#8B5CF6] bg-[rgba(139,92,246,0.12)] px-2.5 py-0.5 rounded border border-[rgba(139,92,246,0.3)] val-display font-semibold" id="lblWife">$500</span>
+                    </div>
+                    <input type="range" id="inputWife" min="0" max="3000" step="50" value="500" oninput="calculateFamilyWealth()">
+                </div>
+            </div>
+
+            <!-- Children Settings -->
+            <div class="flex flex-col gap-4 border-b border-[#222F4C] pb-5">
+                <div class="flex justify-between items-center">
+                    <label class="text-sm font-semibold text-white flex items-center gap-1.5">
+                        <i class="fa-solid fa-child text-[#10B981]"></i> Number of Kids
+                    </label>
+                    <select id="selectKids" class="bg-[#0F1626] border border-[#222F4C] rounded-lg px-3 py-1 text-sm text-white font-medium focus:outline-none focus:border-[#10B981] transition-all" onchange="generateKidsUI()">
+                        <option value="0">None</option>
+                        <option value="1">1 Child</option>
+                        <option value="2" selected>2 Kids</option>
+                        <option value="3">3 Kids</option>
+                        <option value="4">4 Kids</option>
+                    </select>
+                </div>
+
+                <!-- Dynamically Populated Kids Age Inputs Container -->
+                <div id="kidsContainer" class="flex flex-col gap-3">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Global Timeframe and Interest Controls -->
+            <div class="flex flex-col gap-5">
+                <!-- Target Corpus Input (Only visible in Reverse Mode) -->
+                <div class="flex flex-col gap-2 gold-slider hidden" id="targetCorpusGroup">
+                    <div class="flex justify-between items-center text-sm font-semibold">
+                        <label class="text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-bullseye text-[#F59E0B]"></i> Target Wealth Corpus
+                        </label>
+                        <span class="text-[#F59E0B] bg-[rgba(245,158,11,0.12)] px-2.5 py-0.5 rounded border border-[rgba(245,158,11,0.3)] val-display font-semibold" id="lblTargetCorpus">$1,000,000</span>
+                    </div>
+                    <input type="range" id="inputTargetCorpus" min="100000" max="5000000" step="50000" value="1000000" oninput="calculateFamilyWealth()">
+                </div>
+
+                <!-- Number of Years -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between items-center text-sm font-semibold">
+                        <label class="text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-calendar-days text-gray-400"></i> Investment Duration
+                        </label>
+                        <span class="text-[#10B981] bg-[rgba(16,185,129,0.12)] px-2.5 py-0.5 rounded border border-[rgba(16,185,129,0.3)] val-display font-semibold" id="lblYears">20 Years</span>
+                    </div>
+                    <input type="range" id="inputYears" min="1" max="40" value="20" oninput="calculateFamilyWealth()">
+                </div>
+
+                <!-- Rate of Interest -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between items-center text-sm font-semibold">
+                        <label class="text-white flex items-center gap-1.5">
+                            <i class="fa-solid fa-percent text-gray-400"></i> Annual Growth Rate
+                        </label>
+                        <span class="text-[#10B981] bg-[rgba(16,185,129,0.12)] px-2.5 py-0.5 rounded border border-[rgba(16,185,129,0.3)] val-display font-semibold" id="lblRate">7.5%</span>
+                    </div>
+                    <input type="range" id="inputRate" min="2" max="15" step="0.5" value="7.5" oninput="calculateFamilyWealth()">
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== RIGHT COLUMN: DYNAMIC RESULTS & ANALYTICS ==================== -->
+        <div class="lg:col-span-7 flex flex-col justify-between gap-6">
+            
+            <!-- Hero High-Impact Result Card -->
+            <div class="bg-[#172033] border border-[#222F4C] rounded-xl p-6 text-center relative overflow-hidden">
+                <div class="text-xs uppercase tracking-widest text-gray-400 mb-2" id="heroLabel">Combined Accumulated Future Value</div>
+                <div class="text-3xl md:text-5xl font-bold text-white mb-2 hero-value" id="heroValue">$511,165</div>
+                <div class="text-xs md:text-sm text-gray-400" id="heroSubtext">Aggregated tax-deferred shelter values accumulated over 20 years</div>
+                <div class="absolute bottom-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#10B981] to-[#3B82F6]"></div>
+            </div>
+
+            <!-- Spousal Breakdowns/Splits Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Husband Share Card -->
+                <div class="bg-[rgba(59,130,246,0.03)] border border-[#222F4C] border-l-4 border-l-[#3B82F6] rounded-xl p-4">
+                    <div class="text-xs uppercase tracking-wider text-gray-400 mb-1 flex justify-between items-center">
+                        <span id="cardLabelHusband">Husband Accumulated</span>
+                        <i class="fa-solid fa-circle-user text-[#3B82F6]"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white split-value" id="husbandOutputValue">$255,582</div>
+                    <div class="text-[10px] text-gray-400 mt-1" id="husbandSub">Fund contribution allocation of 50%</div>
+                </div>
+
+                <!-- Wife Share Card -->
+                <div class="bg-[rgba(139,92,246,0.03)] border border-[#222F4C] border-l-4 border-l-[#8B5CF6] rounded-xl p-4">
+                    <div class="text-xs uppercase tracking-wider text-gray-400 mb-1 flex justify-between items-center">
+                        <span id="cardLabelWife">Wife Accumulated</span>
+                        <i class="fa-solid fa-circle-user text-[#8B5CF6]"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white split-value" id="wifeOutputValue">$255,582</div>
+                    <div class="text-[10px] text-gray-400 mt-1" id="wifeSub">Fund contribution allocation of 50%</div>
+                </div>
+            </div>
+
+            <!-- Proportional Contribution Breakdown Bar -->
+            <div class="bg-[#172033] border border-[#222F4C] rounded-xl p-5">
+                <div class="flex justify-between text-xs md:text-sm text-gray-400 mb-2">
+                    <span>Portfolio Contribution Split</span>
+                    <span id="compositionPercent" class="font-semibold text-white">50% Husband / 50% Wife</span>
+                </div>
+                <div class="bg-[#080C14] h-4 rounded-full overflow-hidden flex border border-[#222F4C]">
+                    <div class="h-full bg-[#3B82F6] transition-all duration-300" id="barHusband" style="width: 50%"></div>
+                    <div class="h-full bg-[#8B5CF6] transition-all duration-300" id="barWife" style="width: 50%"></div>
+                </div>
+                <div class="flex justify-between mt-3 text-[11px] text-gray-400">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#3B82F6]"></span>
+                        <span>Husband Contribution Base</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#8B5CF6]"></span>
+                        <span>Wife Contribution Base</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Children Milestone Alert Panel -->
+            <div class="bg-[#172033] border border-emerald-500/20 rounded-xl p-5">
+                <div class="text-xs uppercase tracking-wider text-[#10B981] font-bold flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-graduation-cap"></i> Child Education Runway Timeline Advice
+                </div>
+                <div class="text-xs md:text-sm text-gray-200 leading-relaxed" id="milestoneAdviceText">
+                    Assigning systematic savings over a long duration optimizes the maximum Canadian educational grants. Add children's ages on the left to reveal target timeline schedules.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Generational Planning Cards Section -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-[#222F4C]">
+        <div class="bg-[#172033] border border-[#222F4C] p-4 rounded-xl">
+            <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-[#F59E0B]"></i> Coordinated Shelter Maximizer
+            </h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Combining spousal TFSA room ($7,000+ limit each) with joint RRSP tax-deduction shields creates an optimal tax-reduction system, accelerating net-compound performance.
+            </p>
+        </div>
+        <div class="bg-[#172033] border border-[#222F4C] p-4 rounded-xl">
+            <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-piggy-bank text-[#3B82F6]"></i> RESP Smart-Funding Target
+            </h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Targeting a child's early years to secure maximum Canadian Education Savings Grants (CESG) matches up to 20% on the first $2,500 ($500/year free matching per child).
+            </p>
+        </div>
+        <div class="bg-[#172033] border border-[#222F4C] p-4 rounded-xl">
+            <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-umbrella text-[#10B981]"></i> Estate Segregation Bypass
+            </h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Naming spouse and children directly inside modern insurance-wrapped vehicles ensures capital skips long, public, and expensive estate probate delays instantly.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer Footnotes -->
+    <footer class="mt-8 border-t border-[#222F4C] pt-5 text-[10px] md:text-xs text-gray-500 text-center leading-relaxed">
+        *Disclaimer: Calculated values build on compounding interest formulas applied monthly. Universal Life (UL), Registered Plans (TFSA/RRSP/RESP), and Segregated Fund outcomes depend on premium distribution patterns, insurance expense ratios, and asset class selections. All calculations assume normal compounding with zero withdrawal friction.
+    </footer>
+</div>
+
+<!-- ==================== CALCULATOR JAVASCRIPT ENGINE ==================== -->
+<script>
+    let activeMode = 'accumulation'; // Default Mode
+
+    function formatCurrency(val) {
+        return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(val);
+    }
+
+    // Toggle active tab modes and recalculate
+    function switchMode(mode) {
+        activeMode = mode;
+        
+        const tabAccumulation = document.getElementById('tabAccumulation');
+        const tabReverse = document.getElementById('tabReverse');
+        
+        const husbandGroup = document.getElementById('husbandGroup');
+        const wifeGroup = document.getElementById('wifeGroup');
+        const targetCorpusGroup = document.getElementById('targetCorpusGroup');
+
+        if (mode === 'accumulation') {
+            // Adjust visual tab styles
+            tabAccumulation.classList.add('bg-[#0F1626]', 'border', 'border-[#222F4C]', 'text-white');
+            tabAccumulation.classList.remove('text-gray-400', 'hover:text-white');
+            tabReverse.classList.remove('bg-[#0F1626]', 'border', 'border-[#222F4C]', 'text-white');
+            tabReverse.classList.add('text-gray-400', 'hover:text-white');
+
+            // Show forward planning groups, hide reverse groups
+            husbandGroup.classList.remove('hidden');
+            wifeGroup.classList.remove('hidden');
+            targetCorpusGroup.classList.add('hidden');
+
+            // Set Header Text Labels
+            document.getElementById('heroLabel').innerText = "Combined Accumulated Future Value";
+            document.getElementById('cardLabelHusband').innerText = "Husband Accumulated";
+            document.getElementById('cardLabelWife').innerText = "Wife Accumulated";
+            document.getElementById('heroSubtext').innerText = "Aggregated tax-deferred shelter values accumulated across the planning period";
+        } else {
+            // Reverse engineering mode
+            tabReverse.classList.add('bg-[#0F1626]', 'border', 'border-[#222F4C]', 'text-white');
+            tabReverse.classList.remove('text-gray-400', 'hover:text-white');
+            tabAccumulation.classList.remove('bg-[#0F1626]', 'border', 'border-[#222F4C]', 'text-white');
+            tabAccumulation.classList.add('text-gray-400', 'hover:text-white');
+
+            // Hide forward inputs, show target inputs
+            husbandGroup.classList.add('hidden');
+            wifeGroup.classList.add('hidden');
+            targetCorpusGroup.classList.remove('hidden');
+
+            // Set Header Text Labels
+            document.getElementById('heroLabel').innerText = "Combined Monthly Required Deposit";
+            document.getElementById('cardLabelHusband').innerText = "Husband Required Contribution";
+            document.getElementById('cardLabelWife').innerText = "Wife Required Contribution";
+            document.getElementById('heroSubtext').innerText = "Total combined monthly amount needed to achieve the target wealth corpus";
+        }
+
+        calculateFamilyWealth();
+    }
+
+    // Generate dynamic Child UI fields
+    function generateKidsUI() {
+        const selectKids = document.getElementById('selectKids');
+        const kidsCount = parseInt(selectKids.value);
+        const container = document.getElementById('kidsContainer');
+        
+        // Save existing age selections if possible, otherwise default
+        const existingAges = [];
+        for (let i = 1; i <= 4; i++) {
+            const element = document.getElementById(`childAge_${i}`);
+            if (element) {
+                existingAges.push(parseInt(element.value));
+            } else {
+                existingAges.push(2 + (i * 2)); // Dynamic helper default
+            }
+        }
+
+        container.innerHTML = "";
+
+        if (kidsCount === 0) {
+            container.innerHTML = `<div class="text-xs text-gray-500 italic text-center py-2">Add children to coordinate education funding deadlines.</div>`;
+            calculateFamilyWealth();
+            return;
+        }
+
+        for (let i = 1; i <= kidsCount; i++) {
+            const ageVal = existingAges[i - 1] !== undefined ? existingAges[i - 1] : (2 + (i * 2));
+            const childDiv = document.createElement('div');
+            childDiv.className = 'flex items-center justify-between bg-[#0F1626] border border-[#222F4C] p-2.5 rounded-lg';
+            childDiv.innerHTML = `
+                <span class="text-xs font-semibold text-gray-300">Child #${i} Current Age</span>
+                <div class="flex items-center gap-2">
+                    <select id="childAge_${i}" class="bg-[#172033] border border-[#222F4C] rounded px-2 py-1 text-xs text-white focus:outline-none" onchange="calculateFamilyWealth()">
+                        ${Array.from({length: 18}, (_, age) => `<option value="${age}" ${age === ageVal ? 'selected' : ''}>${age} Yrs</option>`).join('')}
+                    </select>
+                </div>
+            `;
+            container.appendChild(childDiv);
+        }
+
+        calculateFamilyWealth();
+    }
+
+    // Standard annuity calculation
+    function getAnnuityFV(monthlyPayment, monthlyRate, totalMonths) {
+        if (monthlyRate === 0) return monthlyPayment * totalMonths;
+        return monthlyPayment * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+    }
+
+    // Solve for monthly payment to reach target
+    function solveRequiredMonthly(targetCorpus, monthlyRate, totalMonths) {
+        if (monthlyRate === 0) return targetCorpus / totalMonths;
+        return targetCorpus / (((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate));
+    }
+
+    // Core financial calculations execution
+    function calculateFamilyWealth() {
+        const horizonYears = parseInt(document.getElementById('inputYears').value);
+        const rateSlider = parseFloat(document.getElementById('inputRate').value);
+        const totalMonths = horizonYears * 12;
+        const rate = rateSlider / 100;
+        const monthlyRate = rate / 12;
+
+        // Label synchronization
+        document.getElementById('lblYears').innerText = horizonYears + " Years";
+        document.getElementById('lblRate').innerText = rateSlider.toFixed(1) + '%';
+
+        if (activeMode === 'accumulation') {
+            const husbandMo = parseFloat(document.getElementById('inputHusband').value);
+            const wifeMo = parseFloat(document.getElementById('inputWife').value);
+            const totalMonthlyCombined = husbandMo + wifeMo;
+
+            document.getElementById('lblHusband').innerText = formatCurrency(husbandMo);
+            document.getElementById('lblWife').innerText = formatCurrency(wifeMo);
+
+            // Compute total accumulation
+            const husbandAccumulated = getAnnuityFV(husbandMo, monthlyRate, totalMonths);
+            const wifeAccumulated = getAnnuityFV(wifeMo, monthlyRate, totalMonths);
+            const combinedAccumulated = husbandAccumulated + wifeAccumulated;
+
+            // Render Hero & Breakdown values
+            document.getElementById('heroValue').innerText = formatCurrency(combinedAccumulated);
+            document.getElementById('husbandOutputValue').innerText = formatCurrency(husbandAccumulated);
+            document.getElementById('wifeOutputValue').innerText = formatCurrency(wifeAccumulated);
+
+            // Spousal proportional splits
+            const husbandShare = totalMonthlyCombined > 0 ? (husbandMo / totalMonthlyCombined) * 100 : 50;
+            const wifeShare = totalMonthlyCombined > 0 ? (wifeMo / totalMonthlyCombined) * 100 : 50;
+
+            document.getElementById('barHusband').style.width = husbandShare + '%';
+            document.getElementById('barWife').style.width = wifeShare + '%';
+            document.getElementById('compositionPercent').innerText = `${Math.round(husbandShare)}% Husband / ${Math.round(wifeShare)}% Wife`;
+            
+            document.getElementById('husbandSub').innerText = `Spousal contribution share of ${Math.round(husbandShare)}%`;
+            document.getElementById('wifeSub').innerText = `Spousal contribution share of ${Math.round(wifeShare)}%`;
+
+        } else {
+            // Mode: Reverse Engineering
+            const targetCorpus = parseFloat(document.getElementById('inputTargetCorpus').value);
+            document.getElementById('lblTargetCorpus').innerText = formatCurrency(targetCorpus);
+
+            const combinedMonthlyNeeded = solveRequiredMonthly(targetCorpus, monthlyRate, totalMonths);
+
+            // Assume standard 50/50 spousal split for target allocation defaults
+            const husbandMoReq = combinedMonthlyNeeded * 0.5;
+            const wifeMoReq = combinedMonthlyNeeded * 0.5;
+
+            // Render Hero & Breakdown values
+            document.getElementById('heroValue').innerText = `${formatCurrency(combinedMonthlyNeeded)}/Mo`;
+            document.getElementById('husbandOutputValue').innerText = `${formatCurrency(husbandMoReq)}/Mo`;
+            document.getElementById('wifeOutputValue').innerText = `${formatCurrency(wifeMoReq)}/Mo`;
+
+            document.getElementById('barHusband').style.width = '50%';
+            document.getElementById('barWife').style.width = '50%';
+            document.getElementById('compositionPercent').innerText = `50% Husband Needed / 50% Wife Needed`;
+
+            document.getElementById('husbandSub').innerText = `Required individual spousal contribution`;
+            document.getElementById('wifeSub').innerText = `Required individual spousal contribution`;
+        }
+
+        calculateChildrenAgesAndMilestones(horizonYears);
+    }
+
+    // Children age analytics advisor panel
+    function calculateChildrenAgesAndMilestones(horizonYears) {
+        const selectKids = document.getElementById('selectKids');
+        const kidsCount = parseInt(selectKids.value);
+        const adviceBox = document.getElementById('milestoneAdviceText');
+
+        if (kidsCount === 0) {
+            adviceBox.innerHTML = `Without children profiles, we suggest utilizing maximum tax-exempt structural limits across both spousal individual shelters. Over a <strong>${horizonYears}-year horizon</strong>, compounding retains full potential without regional educational grant restrictions.`;
+            return;
+        }
+
+        let summaryText = "";
+        let criticalMilestonesCount = 0;
+
+        for (let i = 1; i <= kidsCount; i++) {
+            const ageSelect = document.getElementById(`childAge_${i}`);
+            if (ageSelect) {
+                const currentAge = parseInt(ageSelect.value);
+                const yearsToHigherEducation = 18 - currentAge;
+
+                if (yearsToHigherEducation > 0) {
+                    criticalMilestonesCount++;
+                    const maxGrantPotential = yearsToHigherEducation * 500;
+                    summaryText += `
+                        <div class="mt-2.5 p-2 bg-[#0F1626] rounded border border-[#222F4C] text-[12px]">
+                            <strong class="text-[#10B981]">Child #${i} (Age ${currentAge}):</strong> 
+                            You have a <strong>${yearsToHigherEducation}-year runway</strong> until higher education at Age 18. 
+                            Funding systematically secures up to <strong class="text-[#F59E0B]">${formatCurrency(maxGrantPotential)}</strong> in completely free cumulative Canadian government matching grants (CESG).
+                        </div>
+                    `;
+                } else {
+                    summaryText += `
+                        <div class="mt-2.5 p-2 bg-[#0F1626] rounded border border-[#222F4C] text-[12px]">
+                            <strong class="text-[#3B82F6]">Child #${i} (Age ${currentAge}):</strong> 
+                            Already reached primary college milestones. Focus shift: restructure unused legacy assets into tax-exempt spousal shelters or direct generational wealth-transfer accounts.
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        if (criticalMilestonesCount > 0) {
+            adviceBox.innerHTML = `
+                <div>We detected active educational runways requiring strategic coordination:</div>
+                ${summaryText}
+                <div class="mt-3 text-[11px] text-gray-400 italic">
+                    *Tip: Setting aside systematic contributions early maximizes compound performance inside tax-deferred spaces before university begins.
+                </div>
+            `;
+        } else {
+            adviceBox.innerHTML = `
+                <div>Active children profiles indicate transition maturity phases:</div>
+                ${summaryText}
+                <div class="mt-3 text-[11px] text-gray-400 italic">
+                    Optimize legacy estate transfers to skip probate by naming these adult beneficiaries directly inside tax-exempt insurance wraps.
+                </div>
+            `;
+        }
+    }
+
+    // Bootstrap initial environment variables
+    window.onload = function() {
+        generateKidsUI();
+    };
+</script>
+
+</body>
+</html>

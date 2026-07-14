@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+/* ── Design tokens ──────────────────────────────────────────────────────────
+   "Actuarial poster": paper ground, pure ink, one flat saturated hue per tool.
+   No gradients, no glow. See reference/html_files for what this replaces.     */
+
+@theme {
+  /* Ground + ink */
+  --color-paper: #fbfbf9;
+  --color-ink: #0a0a0a;
+  --color-rule: #d8d6d0;
+  --color-muted: #6b6862;
+
+  /* Principal fill: ink at 12% over paper. Carries "money you put in",
+     in every chart, in every tool. Never changes meaning. */
+  --color-principal: #e1e0dc;
+
+  /* One pure hue per tool. Carries "growth" within that tool. */
+  --color-ultramarine: #1f35ff;
+  --color-amber: #ffb400;
+  --color-vermilion: #ff3b14;
+
+  /* Type */
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+/* The accent is late-bound: a tool sets --accent on its root and every
+   component below it (curve fill, slider thumb, rules) follows. */
+@theme inline {
+  --color-accent: var(--accent);
+}
+
+:root {
+  --accent: var(--color-ultramarine);
+}
+
+[data-accent="ultramarine"] {
+  --accent: var(--color-ultramarine);
+}
+[data-accent="amber"] {
+  --accent: var(--color-amber);
+}
+[data-accent="vermilion"] {
+  --accent: var(--color-vermilion);
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+/* Display face is Archivo's variable width axis pushed wide — the poster
+   voice. Applied via .display rather than a font family swap. */
+.display {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Figures must not jitter while a slider is dragged. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Quality floor: focus is always visible, and it's ink, not a browser blue. */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

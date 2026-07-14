@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFSA vs. Universal Life (UL) - Interactive Wealth Advisor</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* ==================== THEME VARIABLES ==================== */
+        :root {
+            --bg-dark: #090D16;
+            --bg-card: #121826;
+            --bg-input: #1B2336;
+            --text-light: #F3F4F6;
+            --text-gray: #9CA3AF;
+            --emerald: #10B981;
+            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --blue: #3B82F6;
+            --blue-glow: rgba(59, 130, 246, 0.15);
+            --gold: #F59E0B;
+            --border: #242F4D;
+        }
+
+        /* ==================== GLOBAL STYLES ==================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .simulator-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        /* Header Accent Grid lines */
+        .simulator-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--emerald), var(--blue));
+            border-radius: 20px 20px 0 0;
+        }
+
+        header {
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        header p {
+            font-size: 15px;
+            color: var(--text-gray);
+        }
+
+        /* ==================== TAB NAVIGATION ==================== */
+        .tab-nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            background-color: var(--bg-input);
+            padding: 6px;
+            border-radius: 12px;
+            margin-bottom: 35px;
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            font-size: 15px;
+            font-weight: 600;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--bg-card);
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            border: 1px solid var(--border);
+        }
+
+        .tab-btn i {
+            font-size: 16px;
+        }
+
+        /* ==================== MAIN CONTENT GRID ==================== */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ==================== CONTROLS / INPUTS ==================== */
+        .input-card {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .input-header span.val-display {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px;
+            color: var(--emerald);
+            background: var(--emerald-glow);
+            padding: 2px 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .input-header span.val-display.blue {
+            color: var(--blue);
+            background: var(--blue-glow);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid var(--emerald);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* Double-ended customized logic for blue thumb when focusing on UL */
+        .ul-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--blue);
+        }
+
+        /* ==================== PROJECTIONS / OUTPUTS ==================== */
+        .output-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .hero-metric {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-metric::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--emerald), var(--blue));
+        }
+
+        .hero-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+
+        .hero-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .metric-subtext {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-top: 8px;
+        }
+
+        /* Side-by-Side Splits */
+        .split-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .split-card {
+            background-color: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .split-card.active-emerald {
+            border-left: 4px solid var(--emerald);
+        }
+
+        .split-card.active-blue {
+            border-left: 4px solid var(--blue);
+        }
+
+        .split-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+        }
+
+        .split-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Dynamic Progress Bar Stack */
+        .progress-visualization {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .visual-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 10px;
+        }
+
+        .visual-bar-track {
+            background-color: var(--bg-dark);
+            height: 16px;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            border: 1px solid var(--border);
+        }
+
+        .bar-slice {
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .bar-slice.tfsa-slice { background-color: var(--emerald); }
+        .bar-slice.ul-slice { background-color: var(--blue); }
+
+        .legend-row {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-gray);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        /* Disclaimer Footer */
+        footer {
+            margin-top: 35px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+            font-size: 11px;
+            color: var(--text-gray);
+            text-align: center;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="simulator-wrapper">
+    <header>
+        <h1>Interactive Wealth Blueprint</h1>
+        <p>Analyze how a highly customized TFSA + Universal Life structural shield transforms regular deposits into tax-exempt capital.</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchMode('savings')" id="tabSavings">
+            <i class="fa-solid fa-calculator"></i> Mode A: Projections (Invest & Grow)
+        </button>
+        <button class="tab-btn" onclick="switchMode('goal')" id="tabGoal">
+            <i class="fa-solid fa-bullseye"></i> Mode B: Reverse Target (Goal Planning)
+        </button>
+    </div>
+
+    <!-- Active Interface Wrapper -->
+    <div class="main-layout">
+        
+        <!-- ==================== LEFT COLUMN: INPUT CONTROLS ==================== -->
+        <div class="input-card">
+            
+            <!-- Shared Base Metric (Current Age) -->
+            <div class="input-group">
+                <div class="input-header">
+                    <label for="inputAge">Client Starting Age</label>
+                    <span class="val-display" id="lblAge">25</span>
+                </div>
+                <input type="range" id="inputAge" min="18" max="50" value="25" oninput="calculateProjections()">
+            </div>
+
+            <!-- Dynamic Section: Mode A (Savings Mode) Inputs -->
+            <div id="savingsInputs" class="input-group" style="display: flex; flex-direction: column; gap: 25px;">
+                <div class="input-group">
+                    <div class="input-header">
+                        <label for="inputHorizon">Investment Horizon (Years)</label>
+                        <span class="val-display" id="lblHorizon">20</span>
+                    </div>
+                    <input type="range" id="inputHorizon" min="5" max="40" value="20" oninput="calculateProjections()">
+                </div>
+
+                <div class="input-group ul-slider">
+                    <div class="input-header">
+                        <label for="inputUL">Universal Life Monthly Premium</label>
+                        <span class="val-display blue" id="lblUL">$200</span>
+                    </div>
+                    <input type="range" id="inputUL" min="50" max="1500" step="50" value="200" oninput="calculateProjections()">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header">
+                        <label for="inputTFSA">TFSA Monthly Contribution</label>
+                        <span class="val-display" id="lblTFSA">$100</span>
+                    </div>
+                    <input type="range" id="inputTFSA" min="50" max="1500" step="50" value="100" oninput="calculateProjections()">
+                </div>
+            </div>
+
+            <!-- Dynamic Section: Mode B (Goal Mode) Inputs -->
+            <div id="goalInputs" class="input-group" style="display: none; flex-direction: column; gap: 25px;">
+                <div class="input-group">
+                    <div class="input-header">
+                        <label for="inputTargetCorpus">Target Corpus Goal</label>
+                        <span class="val-display" id="lblTargetCorpus">$500,000</span>
+                    </div>
+                    <input type="range" id="inputTargetCorpus" min="50000" max="2500000" step="50000" value="500000" oninput="calculateProjections()">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header">
+                        <label for="inputTargetAge">Target Achievement Age</label>
+                        <span class="val-display" id="lblTargetAge">45</span>
+                    </div>
+                    <input type="range" id="inputTargetAge" min="30" max="70" value="45" oninput="calculateProjections()">
+                </div>
+
+                <div class="input-group">
+                    <div class="input-header">
+                        <label for="inputSplit">Shelter Allocation Split (UL vs TFSA)</label>
+                        <span class="val-display blue" id="lblSplit">60% UL / 40% TFSA</span>
+                    </div>
+                    <input type="range" id="inputSplit" min="10" max="90" step="10" value="60" oninput="calculateProjections()">
+                </div>
+            </div>
+
+            <!-- Shared Return Rate slider -->
+            <div class="input-group">
+                <div class="input-header">
+                    <label for="inputRate">Assumed Average Growth Rate</label>
+                    <span class="val-display" id="lblRate">7%</span>
+                </div>
+                <input type="range" id="inputRate" min="3" max="12" step="0.5" value="7" oninput="calculateProjections()">
+            </div>
+        </div>
+
+        <!-- ==================== RIGHT COLUMN: SYSTEM RESULTS ==================== -->
+        <div class="output-card">
+            
+            <!-- Hero Highlight Shield Projection -->
+            <div class="hero-metric">
+                <div class="hero-label" id="heroTitle">Combined Projected Capital</div>
+                <div class="hero-value" id="heroResult">$141,586</div>
+                <div class="metric-subtext" id="heroSubtext">Accumulated tax-free pool by Age 45</div>
+            </div>
+
+            <!-- Dual Split breakdown cards -->
+            <div class="split-metrics">
+                <div class="split-card active-emerald">
+                    <div class="split-title" id="splitLeftTitle">TFSA Value</div>
+                    <div class="split-value" id="splitLeftValue">$47,195</div>
+                </div>
+                <div class="split-card active-blue">
+                    <div class="split-title" id="splitRightTitle">Universal Life Value</div>
+                    <div class="split-value" id="splitRightValue">$94,391</div>
+                </div>
+            </div>
+
+            <!-- Dynamic visual proportional bar indicator -->
+            <div class="progress-visualization">
+                <div class="visual-bar-header">
+                    <span>Portfolio Composition</span>
+                    <span id="compositionPercent">33% TFSA / 67% UL</span>
+                </div>
+                <div class="visual-bar-track">
+                    <div class="bar-slice tfsa-slice" id="barTFSA" style="width: 33.3%"></div>
+                    <div class="bar-slice ul-slice" id="barUL" style="width: 66.7%"></div>
+                </div>
+                <div class="legend-row">
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background-color: var(--emerald);"></div>
+                        <span>TFSA Shell</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot" style="background-color: var(--blue);"></div>
+                        <span>Universal Life Net Asset Value</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contextual Insight Highlight -->
+            <div class="split-card" style="background-color: var(--bg-input); border-color: rgba(245, 158, 11, 0.2);">
+                <div class="split-title" style="color: var(--gold);"><i class="fa-solid fa-shield-halved"></i> Strategic Advantage Highlight</div>
+                <div class="metric-subtext" id="insightBoxText" style="color: var(--text-light); margin-top: 5px;">
+                    Starting at Age 25 locks in exceptionally low insurance fee scales in your UL plan, maximizing pure compounding performance relative to starting later.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <footer>
+        *Disclaimer: Values are structured using standard compounded interest formulas calculated monthly. Real-world Universal Life (UL) policy values reflect specific premium distributions, underwriting medical files, and administrative cost patterns. Universal Life calculations build in a standard age-relative drag metric representing locked insurance fees.
+    </footer>
+</div>
+
+<!-- Core Calculation Engine -->
+<script>
+    let activeMode = 'savings';
+
+    function formatCurrency(val) {
+        return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(val);
+    }
+
+    function switchMode(mode) {
+        activeMode = mode;
+        
+        // Handle Active button states
+        document.getElementById('tabSavings').classList.toggle('active', mode === 'savings');
+        document.getElementById('tabGoal').classList.toggle('active', mode === 'goal');
+        
+        // Switch sliding columns
+        document.getElementById('savingsInputs').style.display = mode === 'savings' ? 'flex' : 'none';
+        document.getElementById('goalInputs').style.display = mode === 'goal' ? 'flex' : 'none';
+        
+        calculateProjections();
+    }
+
+    // Classic Future Value calculation engine for recurring starting deposits (Annuity Due)
+    function calculateAnnuityFV(monthlyContribution, monthlyRate, totalMonths) {
+        if (monthlyRate === 0) return monthlyContribution * totalMonths;
+        return monthlyContribution * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+    }
+
+    // Solver logic: Finds the exact required monthly contribution needed to reach a Target FV (Annuity Due)
+    function solveRequiredMonthly(targetFV, monthlyRate, totalMonths) {
+        if (monthlyRate === 0) return targetFV / totalMonths;
+        return targetFV / (((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate));
+    }
+
+    function calculateProjections() {
+        const age = parseInt(document.getElementById('inputAge').value);
+        const rate = parseFloat(document.getElementById('inputRate').value) / 100;
+        const monthlyRate = rate / 12;
+
+        // Sync slider standard labels
+        document.getElementById('lblAge').innerText = age;
+        document.getElementById('lblRate').innerText = (rate * 100).toFixed(1) + '%';
+
+        // Universal Life incorporates standard Cost of Insurance (COI) fee drag scaling with entry age
+        const baseCOIDrag = 0.005 + Math.max(0, (age - 25)) * 0.0003; 
+        const adjustedULRate = Math.max(0.01, rate - baseCOIDrag);
+        const adjustedULMonthlyRate = adjustedULRate / 12;
+
+        if (activeMode === 'savings') {
+            // Mode A Logic: Calculate Future Value based on Monthly inputs
+            const horizon = parseInt(document.getElementById('inputHorizon').value);
+            const ulMo = parseFloat(document.getElementById('inputUL').value);
+            const tfsaMo = parseFloat(document.getElementById('inputTFSA').value);
+
+            // Sync display text values
+            document.getElementById('lblHorizon').innerText = horizon;
+            document.getElementById('lblUL').innerText = formatCurrency(ulMo);
+            document.getElementById('lblTFSA').innerText = formatCurrency(tfsaMo);
+
+            const totalMonths = horizon * 12;
+            const tfsaFV = calculateAnnuityFV(tfsaMo, monthlyRate, totalMonths);
+            const ulFV = calculateAnnuityFV(ulMo, adjustedULMonthlyRate, totalMonths);
+            const combinedFV = tfsaFV + ulFV;
+
+            // Display hero metrics
+            document.getElementById('heroTitle').innerText = 'Combined Projected Capital';
+            document.getElementById('heroResult').innerText = formatCurrency(combinedFV);
+            document.getElementById('heroSubtext').innerText = `Accumulated tax-free pool by Age ${age + horizon}`;
+
+            // Displays split elements
+            document.getElementById('splitLeftTitle').innerText = 'TFSA Component Value';
+            document.getElementById('splitLeftValue').innerText = formatCurrency(tfsaFV);
+            document.getElementById('splitRightTitle').innerText = 'Universal Life Capital Value';
+            document.getElementById('splitRightValue').innerText = formatCurrency(ulFV);
+
+            // Set visual proportion bars
+            const tfsaShare = combinedFV > 0 ? (tfsaFV / combinedFV) * 100 : 0;
+            const ulShare = combinedFV > 0 ? (ulFV / combinedFV) * 100 : 0;
+            document.getElementById('barTFSA').style.width = tfsaShare + '%';
+            document.getElementById('barUL').style.width = ulShare + '%';
+            document.getElementById('compositionPercent').innerText = `${Math.round(tfsaShare)}% TFSA / ${Math.round(ulShare)}% UL`;
+
+            // Display dynamic context insight
+            const totalDeposits = (tfsaMo + ulMo) * totalMonths;
+            document.getElementById('insightBoxText').innerHTML = `
+                Contributing ${formatCurrency(tfsaMo + ulMo)}/Mo adds <strong>${formatCurrency(totalDeposits)}</strong> in total principal deposits over ${horizon} years. 
+                Securing zero annual tax drag within these structures preserves approximately <strong>${formatCurrency((combinedFV - totalDeposits) * 0.3)}</strong> extra net capital relative to non-registered alternatives.
+            `;
+
+        } else {
+            // Mode B Logic: Reverse-engineer Monthly requirements to hit Target
+            const targetCorpus = parseFloat(document.getElementById('inputTargetCorpus').value);
+            const targetAge = parseInt(document.getElementById('inputTargetAge').value);
+            const splitPct = parseInt(document.getElementById('inputSplit').value) / 100;
+
+            // Restrain target age to be higher than starting age
+            const minTargetAge = age + 5;
+            let finalTargetAge = targetAge;
+            if (targetAge < minTargetAge) {
+                finalTargetAge = minTargetAge;
+                document.getElementById('inputTargetAge').value = minTargetAge;
+            }
+
+            document.getElementById('lblTargetCorpus').innerText = formatCurrency(targetCorpus);
+            document.getElementById('lblTargetAge').innerText = finalTargetAge;
+            document.getElementById('lblSplit').innerText = `${splitPct * 100}% UL / ${Math.round((1 - splitPct) * 100)}% TFSA`;
+
+            const totalHorizonYears = finalTargetAge - age;
+            const totalMonths = totalHorizonYears * 12;
+
+            // Calculate target shares
+            const ulTargetShare = targetCorpus * splitPct;
+            const tfsaTargetShare = targetCorpus * (1 - splitPct);
+
+            // Solve for required monthly sums
+            const reqMonthlyUL = solveRequiredMonthly(ulTargetShare, adjustedULMonthlyRate, totalMonths);
+            const reqMonthlyTFSA = solveRequiredMonthly(tfsaTargetShare, monthlyRate, totalMonths);
+            const totalReqMonthly = reqMonthlyUL + reqMonthlyTFSA;
+
+            // Display hero metrics
+            document.getElementById('heroTitle').innerText = 'Required Combined Monthly Deposit';
+            document.getElementById('heroResult').innerText = `${formatCurrency(totalReqMonthly)}/Mo`;
+            document.getElementById('heroSubtext').innerText = `Required monthly to reach ${formatCurrency(targetCorpus)} target by Age ${finalTargetAge}`;
+
+            // Displays split elements
+            document.getElementById('splitLeftTitle').innerText = 'Required TFSA Deposit';
+            document.getElementById('splitLeftValue').innerText = `${formatCurrency(reqMonthlyTFSA)}/Mo`;
+            document.getElementById('splitRightTitle').innerText = 'Required UL Premium';
+            document.getElementById('splitRightValue').innerText = `${formatCurrency(reqMonthlyUL)}/Mo`;
+
+            // Adjust bar ratios based on premium allocation profiles
+            const tfsaPremShare = (reqMonthlyTFSA / totalReqMonthly) * 100;
+            const ulPremShare = (reqMonthlyUL / totalReqMonthly) * 100;
+            document.getElementById('barTFSA').style.width = tfsaPremShare + '%';
+            document.getElementById('barUL').style.width = ulPremShare + '%';
+            document.getElementById('compositionPercent').innerText = `${Math.round(tfsaPremShare)}% TFSA Deposit / ${Math.round(ulPremShare)}% UL Premium`;
+
+            // Dynamic advisor text details
+            const totalPlannedContributions = totalReqMonthly * totalMonths;
+            document.getElementById('insightBoxText').innerHTML = `
+                To hit your target, your client inputs a total principal of <strong>${formatCurrency(totalPlannedContributions)}</strong>. 
+                The compound interest engine produces the remaining <strong>${formatCurrency(targetCorpus - totalPlannedContributions)}</strong> inside their sheltered vehicles.
+            `;
+        }
+    }
+
+    // Bootstrap values on initial start
+    window.onload = function() {
+        calculateProjections();
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCB Segregated Funds Wealth & Estate Shield</title>
+    <!-- Premium Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        :root {
+            --bg-dark: #070B13;
+            --bg-card: #101626;
+            --bg-input: #182038;
+            --text-light: #F3F4F6;
+            --text-gray: #9CA3AF;
+            --gold: #D4AF37;
+            --gold-glow: rgba(212, 175, 55, 0.15);
+            --emerald: #10B981;
+            --emerald-glow: rgba(16, 185, 129, 0.15);
+            --indigo: #6366F1;
+            --indigo-glow: rgba(99, 102, 241, 0.15);
+            --border: #222F4C;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+        }
+
+        h1, h2, h3, .val-display, .hero-value, .split-value {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        /* Customized Slider Track styling */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            background: var(--border);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid var(--gold);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .gold-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--gold);
+        }
+
+        .emerald-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--emerald);
+        }
+        
+        .indigo-slider input[type="range"]::-webkit-slider-thumb {
+            border-color: var(--indigo);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 md:p-10">
+
+<div class="w-full max-w-6xl bg-[#101626] border border-[#222F4C] rounded-2xl p-6 md:p-10 shadow-2xl relative overflow-hidden">
+    <!-- Top Decorative Gradient Shield Line -->
+    <div class="absolute top-0 left-0 w-full h-[6px] bg-gradient-to-r from-[#D4AF37] via-[#6366F1] to-[#10B981]"></div>
+
+    <header class="text-center mb-8 relative">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.3)] rounded-full text-[#D4AF37] text-xs font-semibold uppercase tracking-wider mb-3">
+            <i class="fa-solid fa-shield-halved"></i> Institutional Private Wealth Strategy
+        </div>
+        <h1 class="text-2xl md:text-4xl font-bold tracking-tight text-white mb-2">CCB Segregated Funds Shield</h1>
+        <p class="text-xs md:text-sm text-gray-400 max-w-2xl mx-auto leading-relaxed">
+            Discover how restructuring your monthly Canada Child Benefit into premium insurance-wrapped Segregated Funds guarantees capital protection, avoids costly estate probate, and locks in generational growth.
+        </p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- ==================== LEFT COLUMN: CONTROLS & INTERACTIVE SLIDERS ==================== -->
+        <div class="lg:col-span-5 bg-[#182038] border border-[#222F4C] rounded-xl p-6 flex flex-col gap-5">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2 border-b border-[#222F4C] pb-3">
+                <i class="fa-solid fa-sliders text-[#D4AF37]"></i> Strategy Adjustments
+            </h3>
+
+            <!-- Input A: Child's Current Age -->
+            <div class="flex flex-col gap-2 gold-slider">
+                <div class="flex justify-between items-center text-sm font-semibold">
+                    <label class="text-white">Child's Current Age</label>
+                    <span class="text-[#D4AF37] bg-[rgba(212,175,55,0.12)] px-3 py-1 rounded-md border border-[rgba(212,175,55,0.3)] val-display text-base" id="lblChildAge">2</span>
+                </div>
+                <input type="range" id="inputChildAge" min="0" max="17" value="2" oninput="calculateProjections()">
+            </div>
+
+            <!-- Input B: Years of Investment -->
+            <div class="flex flex-col gap-2 indigo-slider">
+                <div class="flex justify-between items-center text-sm font-semibold">
+                    <label class="text-white">Years of CCB Investment</label>
+                    <span class="text-[#6366F1] bg-[rgba(99,102,241,0.12)] px-3 py-1 rounded-md border border-[rgba(99,102,241,0.3)] val-display text-base" id="lblHorizon">16</span>
+                </div>
+                <input type="range" id="inputHorizon" min="1" max="30" value="16" oninput="calculateProjections()">
+            </div>
+
+            <!-- Input C: Monthly CCB Contribution -->
+            <div class="flex flex-col gap-2 emerald-slider">
+                <div class="flex justify-between items-center text-sm font-semibold">
+                    <label class="text-white">Monthly CCB Amount Invested</label>
+                    <span class="text-[#10B981] bg-[rgba(16,185,129,0.12)] px-3 py-1 rounded-md border border-[rgba(16,185,129,0.3)] val-display text-base" id="lblCCBMo">$450</span>
+                </div>
+                <input type="range" id="inputCCBMo" min="50" max="1500" step="50" value="450" oninput="calculateProjections()">
+            </div>
+
+            <!-- Input D: Assumed Percentage of Return -->
+            <div class="flex flex-col gap-2 gold-slider">
+                <div class="flex justify-between items-center text-sm font-semibold">
+                    <label class="text-white">Assumed Annual Return</label>
+                    <span class="text-[#D4AF37] bg-[rgba(212,175,55,0.12)] px-3 py-1 rounded-md border border-[rgba(212,175,55,0.3)] val-display text-base" id="lblRate">7.5%</span>
+                </div>
+                <input type="range" id="inputRate" min="3" max="12" step="0.5" value="7.5" oninput="calculateProjections()">
+            </div>
+
+            <!-- Input E: Segregated Fund Guarantee Selector -->
+            <div class="flex flex-col gap-2 border-t border-[#222F4C] pt-4">
+                <span class="text-sm font-semibold text-white mb-2 block">Insurance Guarantee Level</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <button id="btnGuar75" class="py-2.5 px-4 rounded-lg border font-semibold text-sm transition-all duration-200 bg-[#101626] border-[#D4AF37] text-[#D4AF37]" onclick="setGuarantee(75)">
+                        75% Guarantee <br><span class="text-[10px] text-gray-400 font-normal">Maturity & Death</span>
+                    </button>
+                    <button id="btnGuar100" class="py-2.5 px-4 rounded-lg border font-semibold text-sm transition-all duration-200 text-gray-400 border-[#222F4C]" onclick="setGuarantee(100)">
+                        100% Guarantee <br><span class="text-[10px] text-gray-400 font-normal">Premium Protection</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== RIGHT COLUMN: ANALYTICAL RESULTS & GRAPHICS ==================== -->
+        <div class="lg:col-span-7 flex flex-col justify-between gap-6">
+            
+            <!-- Hero High-Impact Result Card -->
+            <div class="bg-[#182038] border border-[#222F4C] rounded-xl p-6 text-center relative overflow-hidden">
+                <div class="text-xs uppercase tracking-widest text-gray-400 mb-2">Projected CCB Nest Egg</div>
+                <div class="text-3xl md:text-5xl font-bold text-white mb-2 hero-value" id="heroResult">$158,340</div>
+                <div class="text-xs md:text-sm text-gray-400" id="heroSubtext">Accumulated value inside your Segregated Fund by Child's Age 18</div>
+                <div class="absolute bottom-0 left-0 w-full h-[4px] bg-gradient-to-r from-[#D4AF37] to-[#10B981]"></div>
+            </div>
+
+            <!-- Dual Component Cards showing guarantees and compound growth -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Segulated Guarantee Floor -->
+                <div class="bg-[rgba(212,175,55,0.03)] border border-[#222F4C] border-l-4 border-l-[#D4AF37] rounded-xl p-4">
+                    <div class="text-xs uppercase tracking-wider text-gray-400 mb-1 flex justify-between items-center">
+                        <span>Guaranteed Capital Floor</span>
+                        <i class="fa-solid fa-lock text-[#D4AF37] text-xs"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white split-value" id="guarFloorValue">$64,800</div>
+                    <div class="text-[10px] text-gray-400 mt-1" id="guarSub">Protected against any down markets</div>
+                </div>
+
+                <!-- Estate probate bypass card -->
+                <div class="bg-[rgba(99,102,241,0.03)] border border-[#222F4C] border-l-4 border-l-[#6366F1] rounded-xl p-4">
+                    <div class="text-xs uppercase tracking-wider text-gray-400 mb-1 flex justify-between items-center">
+                        <span>Probate-Free Estate Bypass</span>
+                        <i class="fa-solid fa-bolt text-[#6366F1] text-xs"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white split-value" id="probateBypassValue">Direct to Beneficiary</div>
+                    <div class="text-[10px] text-gray-400 mt-1">Zero delay, zero public disclosure</div>
+                </div>
+            </div>
+
+            <!-- Proportional Bar showing Safety Base vs. Market Premium -->
+            <div class="bg-[#182038] border border-[#222F4C] rounded-xl p-5">
+                <div class="flex justify-between text-xs md:text-sm text-gray-400 mb-2">
+                    <span>Capital Safety Makeup</span>
+                    <span id="compositionPercent" class="font-semibold text-white">54% Guaranteed Floor / 46% Compounding Premium</span>
+                </div>
+                <div class="bg-[#070B13] h-4 rounded-full overflow-hidden flex border border-[#222F4C]">
+                    <div class="h-full bg-[#D4AF37] transition-all duration-300" id="barGuar" style="width: 54%"></div>
+                    <div class="h-full bg-[#10B981] transition-all duration-300" id="barPremium" style="width: 46%"></div>
+                </div>
+                <div class="flex justify-between mt-3 text-[11px] text-gray-400">
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#D4AF37]"></span>
+                        <span>Maturity / Death Protection Floor</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="w-2.5 h-2.5 rounded-full bg-[#10B981]"></span>
+                        <span>Market Growth Growth Cap</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Strategic Advantage Panel -->
+            <div class="bg-[#182038] border border-emerald-500/20 rounded-xl p-5">
+                <div class="text-xs uppercase tracking-wider text-[#10B981] font-bold flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-shield-cat"></i> Why Segregated Funds Outclass Mutual Funds for Children
+                </div>
+                <div class="text-xs md:text-sm text-gray-200 leading-relaxed" id="insightBoxText">
+                    By routing child benefit payments into a Segregated Fund, you establish a locked contract guaranteeing that at least 75% of your total inputs are contractually insulated from stock market collapse. It also names the child as beneficiary, immediately paying out bypass-probate upon estate transfer.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Segregated Funds Advantages Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 pt-8 border-t border-[#222F4C]">
+        <div class="bg-[#182038] border border-[#222F4C] p-4 rounded-xl">
+            <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-person-circle-check text-[#D4AF37]"></i> Named Beneficiary Transfer
+            </h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+                If something happens to you, the policy skips probate completely, bypassing expensive legal fees (1.5% - 5% in Canada) to deposit instantly into the child's pocket.
+            </p>
+        </div>
+        <div class="bg-[#182038] border border-[#222F4C] p-4 rounded-xl">
+            <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-trend-up text-[#6366F1]"></i> Market Resets
+            </h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Most Segregated Funds allow you to "reset" your guaranteed floor annually. If your fund doubles, lock in that new peak value as your new permanent minimum.
+            </p>
+        </div>
+        <div class="bg-[#182038] border border-[#222F4C] p-4 rounded-xl">
+            <h4 class="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <i class="fa-solid fa-user-shield text-[#10B981]"></i> Creditor Immunity
+            </h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+                Because these are insurance contracts, they carry unique creditor insulation, securing your child's educational funds even against personal financial liabilities.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footnotes & disclaimer -->
+    <footer class="mt-8 border-t border-[#222F4C] pt-5 text-[10px] md:text-xs text-gray-500 text-center leading-relaxed">
+        *Disclaimer: Calculations assume monthly compounded investment growth. Returns inside Segregated Funds reflect net returns after Management Expense Ratio (MER) adjustments, which carry a tiny insurance cost premium (typically 0.2% - 0.5% higher than mutual funds) in exchange for the contract safety guarantees. Maturity guarantees typically vest on a 10-year lock-in cycle.
+    </footer>
+</div>
+
+<script>
+    let activeGuarantee = 75; // 75% default guarantee
+
+    function formatCurrency(val) {
+        return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(val);
+    }
+
+    function setGuarantee(level) {
+        activeGuarantee = level;
+
+        const btn75 = document.getElementById('btnGuar75');
+        const btn100 = document.getElementById('btnGuar100');
+
+        if (level === 75) {
+            btn75.classList.add('border-[#D4AF37]', 'text-[#D4AF37]');
+            btn75.classList.remove('border-[#222F4C]', 'text-gray-400');
+            btn100.classList.remove('border-[#D4AF37]', 'text-[#D4AF37]');
+            btn100.classList.add('border-[#222F4C]', 'text-gray-400');
+        } else {
+            btn100.classList.add('border-[#D4AF37]', 'text-[#D4AF37]');
+            btn100.classList.remove('border-[#222F4C]', 'text-gray-400');
+            btn75.classList.remove('border-[#D4AF37]', 'text-[#D4AF37]');
+            btn75.classList.add('border-[#222F4C]', 'text-gray-400');
+        }
+
+        calculateProjections();
+    }
+
+    function calculateAnnuityFV(monthlyContribution, monthlyRate, totalMonths) {
+        if (monthlyRate === 0) return monthlyContribution * totalMonths;
+        return monthlyContribution * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+    }
+
+    function calculateProjections() {
+        // Collect slider properties
+        const childAge = parseInt(document.getElementById('inputChildAge').value);
+        const horizon = parseInt(document.getElementById('inputHorizon').value);
+        const ccbMo = parseFloat(document.getElementById('inputCCBMo').value);
+        
+        // Slightly model higher premium drag for 100% guarantee compared to 75%
+        const rateSliderValue = parseFloat(document.getElementById('inputRate').value);
+        const adjustedAnnualRate = activeGuarantee === 100 
+            ? Math.max(0.5, rateSliderValue - 0.4) 
+            : rateSliderValue;
+
+        const rate = adjustedAnnualRate / 100;
+        const monthlyRate = rate / 12;
+
+        // Sync slider labels
+        document.getElementById('lblChildAge').innerText = childAge;
+        document.getElementById('lblHorizon').innerText = horizon + " Years";
+        document.getElementById('lblCCBMo').innerText = formatCurrency(ccbMo);
+        document.getElementById('lblRate').innerText = rateSliderValue.toFixed(1) + '%';
+
+        // Core math computations
+        const totalMonths = horizon * 12;
+        const totalDeposits = ccbMo * totalMonths;
+        const projectCompoundedValue = calculateAnnuityFV(ccbMo, monthlyRate, totalMonths);
+
+        // Segulated Fund Guarantee Floor calculation (Total Principal deposits * guarantee %)
+        const guaranteedCapitalFloor = totalDeposits * (activeGuarantee / 100);
+
+        // Update main hero figures
+        document.getElementById('heroResult').innerText = formatCurrency(projectCompoundedValue);
+        document.getElementById('heroSubtext').innerText = `Accumulated tax-free pool by Child's Age ${childAge + horizon}`;
+
+        // Update secondary breakdown cards
+        document.getElementById('guarFloorValue').innerText = formatCurrency(guaranteedCapitalFloor);
+        document.getElementById('guarSub').innerText = `${activeGuarantee}% of deposits guaranteed contractually`;
+
+        // Calculate proportional sizes for the visual indicator bars
+        const guarShare = projectCompoundedValue > 0 ? (guaranteedCapitalFloor / projectCompoundedValue) * 100 : 0;
+        const premiumShare = Math.max(0, 100 - guarShare);
+
+        document.getElementById('barGuar').style.width = Math.min(100, guarShare) + '%';
+        document.getElementById('barPremium').style.width = Math.max(0, premiumShare) + '%';
+        document.getElementById('compositionPercent').innerText = `${Math.round(guarShare)}% Guaranteed Floor / ${Math.round(premiumShare)}% Compounding Premium`;
+
+        // Generate customized strategy notes
+        const gainsCompounded = projectCompoundedValue - totalDeposits;
+        const probateCostsBypassed = projectCompoundedValue * 0.03; // Illustrative probate average savings
+        document.getElementById('insightBoxText').innerHTML = `
+            Contributing ${formatCurrency(ccbMo)}/month of your child benefit over ${horizon} years sums to <strong>${formatCurrency(totalDeposits)}</strong> in total deposits. 
+            Your compounding engine turns this into a total fund of <strong>${formatCurrency(projectCompoundedValue)}</strong>. 
+            Under your selected level, a minimum of <strong>${formatCurrency(guaranteedCapitalFloor)}</strong> is legally insulated from market risk, while bypassing probate instantly saves your child an estimated <strong>${formatCurrency(probateCostsBypassed)}</strong> in rapid estate transfers.
+        `;
+    }
+
+    // Bootstrap values on initial start
+    window.onload = function() {
+        calculateProjections();
+    };
+</script>
+
+</body>
+</html>
