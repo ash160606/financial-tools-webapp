@@ -30,3 +30,8 @@ export function formatRate(decimal: number): string {
 export function formatPercent(share: number): string {
   return `${Math.round(share)}%`;
 }
+
+/** "1 year", "20 years". Every duration on the site goes through this. */
+export function formatYears(n: number): string {
+  return `${n} ${n === 1 ? "year" : "years"}`;
+}

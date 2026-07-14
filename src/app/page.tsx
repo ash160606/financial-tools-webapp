@@ -1,140 +1,131 @@
+import Link from "next/link";
 import { brand, tools } from "@/config/brand";
-import { SpecimenControls } from "./SpecimenControls";
+import { ccbFutureValue } from "@/lib/finance";
+import { formatCurrency } from "@/lib/format";
 
 /**
- * Phase 1 specimen. This is scaffolding, not the product — Phase 6 replaces it
- * with the real landing page. It exists so the design tokens and type scale can
- * be reviewed before three calculators are built on top of them.
+ * The thesis, computed rather than asserted: a $450 monthly child benefit,
+ * reinvested from birth to 18 and then left alone until 30, without anyone
+ * contributing a dollar of their own.
  */
+const BENEFIT_MONTHLY = 450;
+const BENEFIT_RATE = 0.075;
+const benefitAt18 = ccbFutureValue(0, BENEFIT_MONTHLY, BENEFIT_RATE, 18 * 12);
+const benefitAt30 = ccbFutureValue(0, BENEFIT_MONTHLY, BENEFIT_RATE, 30 * 12);
+const benefitPaidIn = BENEFIT_MONTHLY * 18 * 12;
 
-const swatches = [
-  { name: "paper", hex: "#FBFBF9", use: "ground" },
-  { name: "ink", hex: "#0A0A0A", use: "type, axes, rules" },
-  { name: "rule", hex: "#D8D6D0", use: "hairlines, gridlines" },
-  { name: "principal", hex: "#8A877F", use: "money paid in" },
-  { name: "ultramarine", hex: "#1F35FF", use: "TFSA + Universal Life" },
-  { name: "amber", hex: "#C08000", use: "Segregated Funds" },
-  { name: "vermilion", hex: "#FF3B14", use: "Family & Legacy" },
-];
-
-export default function SpecimenPage() {
+export default function LandingPage() {
   return (
-    <main className="mx-auto w-full max-w-5xl px-6 py-16 md:py-24">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-        Phase 1 specimen — scaffold only
-      </p>
+    <main className="flex-1">
+      {/* Header */}
+      <header className="border-b border-ink">
+        <div className="mx-auto w-full max-w-6xl px-6 py-4">
+          <p className="font-mono text-xs uppercase tracking-[0.15em]">
+            {brand.advisor}
+            <span className="text-muted"> / {brand.firm}</span>
+          </p>
+        </div>
+      </header>
 
-      <h1 className="display mt-6 text-5xl leading-[0.95] md:text-7xl">
-        Financial
-        <br />
-        Illustrations
-      </h1>
+      {/* The pitch. Every tool on this site is a variation of one idea, so the
+          landing page states the idea rather than describing the tools. */}
+      <section className="border-b border-ink">
+        <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-16 md:py-24 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            <h1 className="display text-5xl leading-[0.95] md:text-7xl">
+              Money you
+              <br />
+              already
+              <br />
+              receive.
+            </h1>
+            <p className="mt-8 max-w-lg text-lg leading-relaxed text-muted">
+              The Canada Child Benefit arrives every month until your child
+              turns 18. Most families spend it. Reinvested instead, and then
+              left alone, it does this:
+            </p>
+          </div>
 
-      <p className="mt-6 max-w-xl text-lg text-muted">{brand.tagline}</p>
+          <div className="flex flex-col justify-end">
+            <dl className="flex flex-col gap-6">
+              <div className="border-l-4 border-l-ink pl-5">
+                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
+                  The government pays you
+                </dt>
+                <dd className="display tabular mt-1 text-3xl">
+                  {formatCurrency(benefitPaidIn)}
+                </dd>
+                <p className="mt-1 text-sm text-muted">
+                  {formatCurrency(BENEFIT_MONTHLY)} a month, birth to 18
+                </p>
+              </div>
 
-      <p className="mt-2 font-mono text-xs uppercase tracking-[0.15em]">
-        {brand.advisor} — {brand.firm}
-      </p>
+              <div className="border-l-4 border-l-ink pl-5">
+                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
+                  Worth at 18
+                </dt>
+                <dd className="display tabular mt-1 text-3xl">
+                  {formatCurrency(benefitAt18)}
+                </dd>
+              </div>
 
-      {/* Palette */}
-      <section className="mt-20">
+              <div
+                data-accent="vermilion"
+                className="border-l-4 border-l-accent pl-5"
+              >
+                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
+                  Left untouched, worth at 30
+                </dt>
+                <dd className="display tabular mt-1 text-5xl">
+                  {formatCurrency(benefitAt30)}
+                </dd>
+                <p className="mt-1 text-sm text-muted">
+                  You never earned it and you never contributed it
+                </p>
+              </div>
+            </dl>
+
+            <p className="mt-6 font-mono text-xs leading-relaxed text-muted">
+              Assumes {(BENEFIT_RATE * 100).toFixed(1)}% compounded monthly.
+              Change the assumptions in any illustration below.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* The tools */}
+      <section className="mx-auto w-full max-w-6xl px-6 py-16">
         <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-          Palette
+          Three illustrations
         </h2>
-        <div className="mt-6 border-t border-rule">
-          {swatches.map((s) => (
-            <div
-              key={s.name}
-              className="flex items-center gap-6 border-b border-rule py-4"
+
+        <div className="mt-8 grid gap-px border border-ink bg-ink md:grid-cols-3">
+          {tools.map((tool) => (
+            <Link
+              key={tool.slug}
+              href={`/${tool.slug}`}
+              data-accent={tool.accent}
+              className="group flex flex-col bg-paper p-6 transition-colors duration-100 hover:bg-ink/3"
             >
-              <span
-                className="size-10 shrink-0 border border-rule"
-                style={{ background: s.hex }}
-              />
-              <span className="display w-40 shrink-0 text-sm">{s.name}</span>
-              <span className="tabular font-mono text-sm text-muted">
-                {s.hex}
+              <span className="h-2 w-full bg-accent" />
+              <h3 className="display mt-6 text-2xl leading-tight">
+                {tool.name}
+              </h3>
+              <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">
+                {tool.summary}
+              </p>
+              <span className="mt-6 font-mono text-xs uppercase tracking-[0.15em] underline underline-offset-4 group-hover:no-underline">
+                Open the illustration
               </span>
-              <span className="ml-auto text-right text-sm text-muted">
-                {s.use}
-              </span>
-            </div>
+            </Link>
           ))}
         </div>
-      </section>
 
-      {/* Type */}
-      <section className="mt-20">
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-          Type
-        </h2>
-        <div className="mt-6 space-y-8 border-t border-rule pt-8">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-              Display — Archivo, width 125
-            </p>
-            <p className="display tabular mt-2 text-6xl">$1,284,905</p>
-          </div>
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-              Body — Instrument Sans
-            </p>
-            <p className="mt-2 max-w-xl text-lg">
-              Reinvesting the Canada Child Benefit until the child turns 18
-              converts a transfer payment into a compounding position.
-            </p>
-          </div>
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-              Ledger — IBM Plex Mono, tabular
-            </p>
-            <table className="tabular mt-2 font-mono text-sm">
-              <tbody>
-                {[
-                  ["2026", "6,000", "218"],
-                  ["2031", "36,000", "8,441"],
-                  ["2044", "120,000", "141,586"],
-                ].map(([year, paid, growth]) => (
-                  <tr key={year} className="border-b border-rule">
-                    <td className="py-2 pr-10">{year}</td>
-                    <td className="py-2 pr-10 text-right">{paid}</td>
-                    <td className="py-2 text-right">{growth}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* Primitives, live */}
-      <section className="mt-20">
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-          Primitives
-        </h2>
-        <div className="mt-6">
-          <SpecimenControls />
-        </div>
-      </section>
-
-      {/* Accent binding — proves --accent is late-bound per tool */}
-      <section className="mt-20">
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
-          Accent binding
-        </h2>
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
-          {tools.map((t) => (
-            <div
-              key={t.slug}
-              data-accent={t.accent}
-              className="border border-rule p-5"
-            >
-              <div className="h-2 w-full bg-accent" />
-              <p className="display mt-4 text-lg">{t.name}</p>
-              <p className="mt-2 text-sm text-muted">{t.summary}</p>
-            </div>
-          ))}
-        </div>
+        <p className="mt-8 max-w-2xl text-sm leading-relaxed text-muted">
+          Every illustration runs in your browser and puts its settings in the
+          page address, so you can configure one and send the link. The person
+          who opens it sees exactly the numbers you saw.
+        </p>
       </section>
     </main>
   );
