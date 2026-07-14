@@ -11,9 +11,9 @@ const swatches = [
   { name: "paper", hex: "#FBFBF9", use: "ground" },
   { name: "ink", hex: "#0A0A0A", use: "type, axes, rules" },
   { name: "rule", hex: "#D8D6D0", use: "hairlines, gridlines" },
-  { name: "principal", hex: "#E1E0DC", use: "money paid in" },
+  { name: "principal", hex: "#8A877F", use: "money paid in" },
   { name: "ultramarine", hex: "#1F35FF", use: "TFSA + Universal Life" },
-  { name: "amber", hex: "#FFB400", use: "Segregated Funds" },
+  { name: "amber", hex: "#C08000", use: "Segregated Funds" },
   { name: "vermilion", hex: "#FF3B14", use: "Family & Legacy" },
 ];
 

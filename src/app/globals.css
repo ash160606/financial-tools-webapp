@@ -11,13 +11,21 @@
   --color-rule: #d8d6d0;
   --color-muted: #6b6862;
 
-  /* Principal fill: ink at 12% over paper. Carries "money you put in",
-     in every chart, in every tool. Never changes meaning. */
-  --color-principal: #e1e0dc;
+  /* Principal fill. Carries "money you put in", in every chart, in every tool.
+     Never changes meaning.
 
-  /* One pure hue per tool. Carries "growth" within that tool. */
+     Deliberately achromatic: growth is the story, so growth gets the hue and
+     principal stays neutral. Its value is set by contrast, not taste — the
+     original #E1E0DC scored 1.27:1 against paper, which is fine for a hairline
+     and invisible as an area fill. This clears 3:1. */
+  --color-principal: #8a877f;
+
+  /* One pure hue per tool. Carries "growth" within that tool.
+     Every value clears 3:1 against paper: amber is a deep ochre rather than a
+     bright yellow because #FFB400 scored 1.72:1 and no amount of intent fixes
+     yellow on white. */
   --color-ultramarine: #1f35ff;
-  --color-amber: #ffb400;
+  --color-amber: #c08000;
   --color-vermilion: #ff3b14;
 
   /* Type */

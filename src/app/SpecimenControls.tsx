@@ -8,7 +8,13 @@ import { Choice } from "@/components/ui/Choice";
 import { Stat } from "@/components/ui/Stat";
 import { SplitBar } from "@/components/ui/SplitBar";
 import { Callout } from "@/components/ui/Callout";
-import { futureValueAnnuityDue } from "@/lib/finance";
+import { ProjectionCurve } from "@/components/chart/ProjectionCurve";
+import { Ledger } from "@/components/chart/Ledger";
+import {
+  futureValueAnnuityDue,
+  projectSeries,
+  guaranteeFloor,
+} from "@/lib/finance";
 import { formatCurrency, formatRate } from "@/lib/format";
 import type { Accent } from "@/config/brand";
 
@@ -38,6 +44,18 @@ export function SpecimenControls() {
   const value = futureValueAnnuityDue(monthly, rate, months);
   const growth = value - principal;
 
+  const series = projectSeries([{ monthly, annualRate: rate }], months);
+
+  // Only the segregated-fund tool has a floor; show it here when amber is picked,
+  // which is the accent that tool uses.
+  const floor =
+    accent === "amber"
+      ? {
+          value: guaranteeFloor(principal, guarantee),
+          label: `${guarantee}% guaranteed`,
+        }
+      : undefined;
+
   return (
     <div data-accent={accent} className="border border-ink p-6 md:p-8">
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4 border-b border-rule pb-6">
@@ -54,7 +72,14 @@ export function SpecimenControls() {
 
       <ModeTabs modes={MODES} value={mode} onChange={setMode} />
 
-      <div className="mt-8 grid gap-10 lg:grid-cols-2">
+      <div className="mt-8">
+        <ProjectionCurve series={series} floor={floor} />
+        <div className="mt-6">
+          <Ledger series={series} />
+        </div>
+      </div>
+
+      <div className="mt-10 grid gap-10 lg:grid-cols-2">
         <div className="flex flex-col gap-6">
           <Slider
             label="Monthly deposit"
