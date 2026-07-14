@@ -1,4 +1,5 @@
 import { brand, tools } from "@/config/brand";
+import { SpecimenControls } from "./SpecimenControls";
 
 /**
  * Phase 1 specimen. This is scaffolding, not the product — Phase 6 replaces it
@@ -103,6 +104,16 @@ export default function SpecimenPage() {
               </tbody>
             </table>
           </div>
+        </div>
+      </section>
+
+      {/* Primitives, live */}
+      <section className="mt-20">
+        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
+          Primitives
+        </h2>
+        <div className="mt-6">
+          <SpecimenControls />
         </div>
       </section>
 
