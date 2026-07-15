@@ -11,6 +11,9 @@
   --color-rule: #d8d6d0;
   --color-muted: #6b6862;
 
+  /* Pastel green wash for interactive hover states. */
+  --color-mint: #dff0df;
+
   /* Principal fill. Carries "money you put in", in every chart, in every tool.
      Never changes meaning.
 
@@ -78,6 +81,45 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-ink);
   outline-offset: 2px;
+}
+
+/* Login screen only: a calm fade-up on load and a short shake on a rejected
+   code. Both are neutralized by the reduced-motion rule below. */
+.login-enter {
+  animation: login-fade 0.4s ease-out both;
+}
+@keyframes login-fade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-shake {
+  animation: login-shake 0.4s ease-in-out;
+}
+@keyframes login-shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(4px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-7px);
+  }
+  40%,
+  60% {
+    transform: translateX(7px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

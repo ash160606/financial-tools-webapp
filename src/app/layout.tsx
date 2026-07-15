@@ -4,6 +4,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { brand } from "@/config/brand";
 import { ComplianceBanner } from "@/components/ui/ComplianceBanner";
 import { SiteFooter } from "@/components/ui/SiteFooter";
+import { ChromeGate } from "@/components/ui/ChromeGate";
 import "./globals.css";
 
 // Display: Archivo's variable width axis lets us reach the expanded, poster
@@ -57,9 +58,13 @@ export default function RootLayout({
       className={`${archivo.variable} ${instrumentSans.variable} ${plexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
-        <ComplianceBanner />
+        <ChromeGate>
+          <ComplianceBanner />
+        </ChromeGate>
         <NuqsAdapter>{children}</NuqsAdapter>
-        <SiteFooter />
+        <ChromeGate>
+          <SiteFooter />
+        </ChromeGate>
       </body>
     </html>
   );

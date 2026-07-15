@@ -1,18 +1,6 @@
+import Image from "next/image";
 import Link from "next/link";
 import { brand, tools } from "@/config/brand";
-import { ccbFutureValue } from "@/lib/finance";
-import { formatCurrency } from "@/lib/format";
-
-/**
- * The thesis, computed rather than asserted: a $450 monthly child benefit,
- * reinvested from birth to 18 and then left alone until 30, without anyone
- * contributing a dollar of their own.
- */
-const BENEFIT_MONTHLY = 450;
-const BENEFIT_RATE = 0.075;
-const benefitAt18 = ccbFutureValue(0, BENEFIT_MONTHLY, BENEFIT_RATE, 18 * 12);
-const benefitAt30 = ccbFutureValue(0, BENEFIT_MONTHLY, BENEFIT_RATE, 30 * 12);
-const benefitPaidIn = BENEFIT_MONTHLY * 18 * 12;
 
 export default function LandingPage() {
   return (
@@ -27,67 +15,28 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* The pitch. Every tool on this site is a variation of one idea, so the
-          landing page states the idea rather than describing the tools. */}
+      {/* Hero. A circular portrait, the advisor's name in the poster face, and
+          a one-line statement of what the firm does. */}
       <section className="border-b border-ink">
-        <div className="mx-auto grid w-full max-w-6xl gap-12 px-6 py-16 md:py-24 lg:grid-cols-[1.1fr_1fr]">
+        <div className="mx-auto flex w-full max-w-6xl flex-col items-start gap-10 px-6 py-16 md:flex-row md:items-center md:gap-14 md:py-24">
+          <Image
+            src="/kuntal.jpeg"
+            alt={`Portrait of ${brand.advisor}`}
+            width={280}
+            height={280}
+            priority
+            className="aspect-square w-40 shrink-0 rounded-full border border-ink object-cover object-[center_15%] md:w-64"
+          />
+
           <div>
-            <h1 className="display text-5xl leading-[0.95] md:text-7xl">
-              Money you
-              <br />
-              already
-              <br />
-              receive.
-            </h1>
-            <p className="mt-8 max-w-lg text-lg leading-relaxed text-muted">
-              The Canada Child Benefit arrives every month until your child
-              turns 18. Most families spend it. Reinvested instead, and then
-              left alone, it does this:
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted">
+              {brand.firm}
             </p>
-          </div>
-
-          <div className="flex flex-col justify-end">
-            <dl className="flex flex-col gap-6">
-              <div className="border-l-4 border-l-ink pl-5">
-                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-                  The government pays you
-                </dt>
-                <dd className="display tabular mt-1 text-3xl">
-                  {formatCurrency(benefitPaidIn)}
-                </dd>
-                <p className="mt-1 text-sm text-muted">
-                  {formatCurrency(BENEFIT_MONTHLY)} a month, birth to 18
-                </p>
-              </div>
-
-              <div className="border-l-4 border-l-ink pl-5">
-                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-                  Worth at 18
-                </dt>
-                <dd className="display tabular mt-1 text-3xl">
-                  {formatCurrency(benefitAt18)}
-                </dd>
-              </div>
-
-              <div
-                data-accent="vermilion"
-                className="border-l-4 border-l-accent pl-5"
-              >
-                <dt className="font-mono text-xs uppercase tracking-[0.15em] text-muted">
-                  Left untouched, worth at 30
-                </dt>
-                <dd className="display tabular mt-1 text-5xl">
-                  {formatCurrency(benefitAt30)}
-                </dd>
-                <p className="mt-1 text-sm text-muted">
-                  You never earned it and you never contributed it
-                </p>
-              </div>
-            </dl>
-
-            <p className="mt-6 font-mono text-xs leading-relaxed text-muted">
-              Assumes {(BENEFIT_RATE * 100).toFixed(1)}% compounded monthly.
-              Change the assumptions in any illustration below.
+            <h1 className="display mt-3 text-5xl leading-[0.95] md:text-7xl">
+              {brand.advisor}
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted">
+              {brand.tagline}
             </p>
           </div>
         </div>
@@ -105,7 +54,7 @@ export default function LandingPage() {
               key={tool.slug}
               href={`/${tool.slug}`}
               data-accent={tool.accent}
-              className="group flex flex-col bg-paper p-6 transition-colors duration-100 hover:bg-ink/3"
+              className="group flex flex-col bg-paper p-6 transition-colors duration-100 hover:bg-mint"
             >
               <span className="h-2 w-full bg-accent" />
               <h3 className="display mt-6 text-2xl leading-tight">
