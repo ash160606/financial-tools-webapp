@@ -27,7 +27,7 @@ export async function login(
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
+    maxAge: 60 * 60 * 24 * 2, // 2 days
   });
 
   // redirect() throws to interrupt the action, so it must come after the cookie

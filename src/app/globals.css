@@ -5,46 +5,87 @@
    No gradients, no glow. See reference/html_files for what this replaces.     */
 
 @theme {
-  /* Ground + ink */
-  --color-paper: #fbfbf9;
-  --color-ink: #0a0a0a;
-  --color-rule: #d8d6d0;
-  --color-muted: #6b6862;
-
-  /* Pastel green wash for interactive hover states. */
-  --color-mint: #dff0df;
-
-  /* Principal fill. Carries "money you put in", in every chart, in every tool.
-     Never changes meaning.
-
-     Deliberately achromatic: growth is the story, so growth gets the hue and
-     principal stays neutral. Its value is set by contrast, not taste — the
-     original #E1E0DC scored 1.27:1 against paper, which is fine for a hairline
-     and invisible as an area fill. This clears 3:1. */
-  --color-principal: #8a877f;
-
-  /* One pure hue per tool. Carries "growth" within that tool.
-     Every value clears 3:1 against paper: amber is a deep ochre rather than a
-     bright yellow because #FFB400 scored 1.72:1 and no amount of intent fixes
-     yellow on white. */
-  --color-ultramarine: #1f35ff;
-  --color-amber: #c08000;
-  --color-vermilion: #ff3b14;
-
   /* Type */
   --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
-/* The accent is late-bound: a tool sets --accent on its root and every
-   component below it (curve fill, slider thumb, rules) follows. */
+/* Every color is late-bound. `@theme inline` emits `var(--…)` references into
+   the generated utilities (bg-paper, text-ink, fill-accent, …) instead of
+   baking a hex, so the raw values defined below flow through at runtime — which
+   is what lets one attribute on <html> repaint the whole UI. The accent is
+   doubly late-bound: a tool sets --accent on its root and everything below it
+   (curve fill, slider thumb, rules) follows. */
 @theme inline {
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-rule: var(--rule);
+  --color-muted: var(--muted);
+  --color-mint: var(--mint);
+  --color-principal: var(--principal);
+  --color-surface: var(--surface);
+  --color-ultramarine: var(--ultramarine);
+  --color-amber: var(--amber);
+  --color-vermilion: var(--vermilion);
   --color-accent: var(--accent);
 }
 
-:root {
-  --accent: var(--color-ultramarine);
+/* Light is the default, and also the explicit opt-out when the OS is dark but
+   the visitor has forced light via the appearance toggle.
+
+   principal: neutral fill carrying "money you put in" in every chart. Kept
+   achromatic so growth gets the hue; its value is set by contrast, not taste —
+   #E1E0DC scored 1.27:1 against paper, this clears 3:1.
+   accents: one pure hue per tool carrying "growth". Each clears 3:1 against
+   paper — amber is a deep ochre, not a bright yellow, because #FFB400 scored
+   1.72:1 and no amount of intent fixes yellow on white. */
+:root,
+:root[data-theme="light"] {
+  --paper: #fbfbf9;
+  --ink: #0a0a0a;
+  --rule: #d8d6d0;
+  --muted: #6b6862;
+  --mint: #dff0df; /* pastel green hover wash */
+  --principal: #8a877f;
+  --surface: #ffffff; /* raised panel: login cells, monogram, inverse button */
+  --ultramarine: #1f35ff;
+  --amber: #c08000;
+  --vermilion: #ff3b14;
+  --accent: var(--ultramarine);
+}
+
+/* Dark: ink ground, paper ink. Same contrast discipline inverted — the hues are
+   lightened for the dark ground exactly as they were darkened for white (amber
+   can return toward gold; ultramarine lifts to clear 3:1). Applies when the OS
+   asks for dark and the visitor hasn't forced light. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #111110;
+    --ink: #f2f0ea;
+    --rule: #33322e;
+    --muted: #a09c92;
+    --mint: #17251a;
+    --principal: #8a877f;
+    --surface: #1b1a18;
+    --ultramarine: #6f7cff;
+    --amber: #e5a531;
+    --vermilion: #ff6a47;
+  }
+}
+
+/* ...and when the visitor forces dark via the toggle, regardless of OS. */
+:root[data-theme="dark"] {
+  --paper: #111110;
+  --ink: #f2f0ea;
+  --rule: #33322e;
+  --muted: #a09c92;
+  --mint: #17251a;
+  --principal: #8a877f;
+  --surface: #1b1a18;
+  --ultramarine: #6f7cff;
+  --amber: #e5a531;
+  --vermilion: #ff6a47;
 }
 
 [data-accent="ultramarine"] {

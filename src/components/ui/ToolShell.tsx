@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { brand, type Accent } from "@/config/brand";
 import { Disclaimer } from "./Disclaimer";
+import { ThemeToggle } from "./ThemeToggle";
 
 type ToolShellProps = {
   /** Sets --accent for everything below. Slider fills, curve, rules all follow. */
@@ -26,9 +27,12 @@ export function ToolShell({
             {brand.advisor}
             <span className="text-muted"> / {brand.firm}</span>
           </Link>
-          <Link href="/" className="text-sm underline underline-offset-4">
-            All illustrations
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="text-sm underline underline-offset-4">
+              All illustrations
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 

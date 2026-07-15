@@ -10,16 +10,27 @@ export function LoginForm() {
   const [state, formAction, pending] = useActionState(login, initialState);
   const [value, setValue] = useState("");
   const [shake, setShake] = useState(false);
+  const [handledState, setHandledState] = useState(state);
 
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // A rejected code clears the row, shakes it, and refocuses so the next attempt
-  // starts clean. Keyed on the action's returned error object identity.
+  // A rejected code clears the row and starts the shake. useActionState returns
+  // a fresh state object per submission, so a changed identity carrying an error
+  // marks a new rejection — reset here during render (React's "adjust state when
+  // a value changes" pattern) rather than in an effect.
+  if (state !== handledState) {
+    setHandledState(state);
+    if (state.error) {
+      setValue("");
+      setShake(true);
+    }
+  }
+
+  // The rejection's side effects: refocus for the next attempt, then end the
+  // shake once it has played.
   useEffect(() => {
     if (!state.error) return;
-    setValue("");
-    setShake(true);
     inputRef.current?.focus();
     const id = window.setTimeout(() => setShake(false), 400);
     return () => window.clearTimeout(id);
@@ -66,10 +77,10 @@ export function LoginForm() {
           {cells.map((_, i) => (
             <div
               key={i}
-              className="flex h-14 w-11 items-center justify-center rounded-2xl border border-[#d2d2d7] bg-white transition-all duration-200 sm:w-12"
+              className="flex h-14 w-11 items-center justify-center rounded-2xl border border-rule bg-surface transition-all duration-200 sm:w-12"
             >
               {value[i] ? (
-                <span className="size-2.5 rounded-full bg-[#1d1d1f]" />
+                <span className="size-2.5 rounded-full bg-ink" />
               ) : null}
             </div>
           ))}
@@ -78,7 +89,7 @@ export function LoginForm() {
 
       <p
         role="alert"
-        className={`mt-4 h-5 text-[13px] text-[#1d1d1f] transition-opacity duration-200 ${
+        className={`mt-4 h-5 text-[13px] text-ink transition-opacity duration-200 ${
           state.error ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -88,7 +99,7 @@ export function LoginForm() {
       <button
         type="submit"
         disabled={!complete || pending}
-        className="mt-2 rounded-full px-6 py-2.5 text-sm font-medium transition-colors duration-200 enabled:bg-[#1d1d1f] enabled:text-white enabled:hover:bg-black disabled:bg-[#e8e8ed] disabled:text-[#86868b]"
+        className="mt-2 rounded-full px-6 py-2.5 text-sm font-medium transition-colors duration-200 enabled:bg-ink enabled:text-paper enabled:hover:bg-ink/90 disabled:bg-rule disabled:text-muted"
       >
         {pending ? "Checking…" : "Continue"}
       </button>

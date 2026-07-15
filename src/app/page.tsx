@@ -1,17 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { brand, tools } from "@/config/brand";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export default function LandingPage() {
   return (
     <main className="flex-1">
       {/* Header */}
       <header className="border-b border-ink">
-        <div className="mx-auto w-full max-w-6xl px-6 py-4">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-6 py-4">
           <p className="font-mono text-xs uppercase tracking-[0.15em]">
             {brand.advisor}
             <span className="text-muted"> / {brand.firm}</span>
           </p>
+          <ThemeToggle />
         </div>
       </header>
 
